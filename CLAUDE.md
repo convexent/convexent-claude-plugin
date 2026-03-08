@@ -7,13 +7,13 @@ You have access to the `convexent` CLI for working with Convexent financial mode
 The CLI requires authentication. Check auth status first:
 
 ```bash
-npx convexent auth status
+convexent auth status
 ```
 
 If not authenticated, the user needs to set a token:
 ```bash
-npx convexent auth set-token <api-key>
-npx convexent auth set-url <api-url>   # if not using production
+convexent auth set-token <api-key>
+convexent auth set-url <api-url>   # if not using production
 ```
 
 If you get exit code 3, tell the user to authenticate.
@@ -22,59 +22,65 @@ If you get exit code 3, tell the user to authenticate.
 
 ### Browse & Inspect
 ```bash
-npx convexent project list --search "acme"
-npx convexent project get <project-id>
-npx convexent model list --project <project-id>
-npx convexent model get <model-id>                # summary: assumptions + metric formulas
-npx convexent model get <model-id> --full-json     # raw DSL spec JSON
+convexent project list --search "acme"
+convexent project get <project-id>
+convexent model list --project <project-id>
+convexent model get <model-id>                # summary: assumptions + metric formulas
+convexent model get <model-id> --full-json     # raw DSL spec JSON
 ```
 
 ### Calculate & Export
 ```bash
-npx convexent model calculate <model-id>                    # formatted metric table
-npx convexent model calculate <model-id> --scenario upside  # specific scenario
-npx convexent model export <model-id> --out model.xlsx      # download Excel
+convexent model calculate <model-id>                    # formatted metric table
+convexent model calculate <model-id> --scenario upside  # specific scenario
+convexent model export <model-id> --out model.xlsx      # download Excel
 ```
 
 ### Edit Model (Direct)
 ```bash
 # Full spec save (structural changes)
-npx convexent model save <model-id> --spec updated.json
+convexent model save <model-id> --spec updated.json
 
 # Surgical JSON Patch (value edits)
-npx convexent model patch <model-id> --ops '[{"op":"replace","path":"/models/0/assumptions/3/value","value":0.15}]'
+convexent model patch <model-id> --ops '[{"op":"replace","path":"/models/0/assumptions/3/value","value":0.15}]'
 ```
 
 ### AI Edit (Propose → Apply)
 ```bash
 # Step 1: Propose a patch
-npx convexent model edit propose <model-id> --prompt "Add a DCF section with WACC and terminal value"
+convexent model edit propose <model-id> --prompt "Add a DCF section with WACC and terminal value"
 
 # Or use a suggestion by label:
-npx convexent model suggestions <model-id>
-npx convexent model edit propose <model-id> --suggestion "sensitivity"
+convexent model suggestions <model-id>
+convexent model edit propose <model-id> --suggestion "sensitivity"
 
 # Step 2: Apply or discard the proposed patch (prompt ID is in the propose output)
-npx convexent model edit apply <model-id> --prompt <prompt-id>
-npx convexent model edit discard <model-id> --prompt <prompt-id>
+convexent model edit apply <model-id> --prompt <prompt-id>
+convexent model edit discard <model-id> --prompt <prompt-id>
 ```
 
 ### AI Analysis
 ```bash
-npx convexent model analyze run <model-id> --prompt "What happens to IRR if terminal growth increases to 3%?"
+convexent model analyze run <model-id> --prompt "What happens to IRR if terminal growth increases to 3%?"
+```
+
+### Create Model
+```bash
+convexent model create --prompt "SaaS revenue model with ARR, churn, and expansion" --name "SaaS Model"
+convexent model create --prompt "DCF valuation" --project <project-id>  # add to existing project
 ```
 
 ### History & Undo
 ```bash
-npx convexent model audit <model-id>
-npx convexent model restore <model-id> --snapshot <audit-id>
+convexent model audit <model-id>
+convexent model restore <model-id> --snapshot <audit-id>
 ```
 
 ### Jobs
 ```bash
-npx convexent job list --status started
-npx convexent job get <job-id>
-npx convexent job cancel <job-id>
+convexent job list --status started
+convexent job get <job-id>
+convexent job cancel <job-id>
 ```
 
 ## Output Formats
@@ -83,10 +89,10 @@ All commands return JSON by default when piped (non-TTY). For human-readable out
 
 ```bash
 # Get a specific assumption value
-npx convexent model get <id> --full-json | jq '.models[0].assumptions[] | select(.id == "revenue_growth")'
+convexent model get <id> --full-json | jq '.models[0].assumptions[] | select(.id == "revenue_growth")'
 
 # Get calculated metric values as JSON
-npx convexent model calculate <id> --output json | jq '.metrics.revenue.values.base'
+convexent model calculate <id> --output json | jq '.metrics.revenue.values.base'
 ```
 
 ## Important Patterns

@@ -9,7 +9,7 @@ This repo contains agent instructions (`CLAUDE.md`) and slash command skills tha
 ## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code) installed
-- Node.js 18+ (for `npx convexent`)
+- Node.js 18+ (for `convexent`)
 - A Convexent API key or account
 
 ## Installation
@@ -55,7 +55,7 @@ Agent instructions with:
 Before using the CLI, authenticate:
 
 ```bash
-npx convexent auth set-token sm_your_api_key
-npx convexent auth set-url https://api.convexent.com  # if not default
-npx convexent auth status
+convexent auth set-token sm_your_api_key
+convexent auth set-url https://api.convexent.com  # if not default
+convexent auth status
 ```

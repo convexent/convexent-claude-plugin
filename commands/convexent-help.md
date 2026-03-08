@@ -62,24 +62,24 @@ AI Edit Workflow (Propose → Apply)
 ==================================
 
 1. Get suggestions (optional):
-   npx convexent model suggestions <model-id>
+   convexent model suggestions <model-id>
 
 2. Propose a patch:
-   npx convexent model edit propose <model-id> --prompt "Add WACC calculation"
+   convexent model edit propose <model-id> --prompt "Add WACC calculation"
    # or from a suggestion:
-   npx convexent model edit propose <model-id> --suggestion "sensitivity"
+   convexent model edit propose <model-id> --suggestion "sensitivity"
 
 3. Review the response — it shows the prompt ID and summary
 
 4. Apply or discard:
-   npx convexent model edit apply <model-id> --prompt <prompt-id>
-   npx convexent model edit discard <model-id> --prompt <prompt-id>
+   convexent model edit apply <model-id> --prompt <prompt-id>
+   convexent model edit discard <model-id> --prompt <prompt-id>
 
 5. Verify with calculation:
-   npx convexent model calculate <model-id>
+   convexent model calculate <model-id>
 
 6. Send feedback (optional):
-   npx convexent model edit feedback <model-id> --prompt <prompt-id> --rating up
+   convexent model edit feedback <model-id> --prompt <prompt-id> --rating up
 ```
 
 ### If topic is "analyze"
@@ -91,13 +91,13 @@ Scenario Analysis Workflow
 ==========================
 
 1. Run an analysis:
-   npx convexent model analyze run <model-id> --prompt "What if revenue drops 20%?"
+   convexent model analyze run <model-id> --prompt "What if revenue drops 20%?"
 
 2. Continue the thread:
-   npx convexent model analyze run <model-id> --prompt "Now try 30% drop" --thread <thread-id>
+   convexent model analyze run <model-id> --prompt "Now try 30% drop" --thread <thread-id>
 
 3. Send feedback:
-   npx convexent model analyze feedback <model-id> --prompt <prompt-id> --rating up
+   convexent model analyze feedback <model-id> --prompt <prompt-id> --rating up
 ```
 
 ### If topic is "auth"
@@ -108,10 +108,10 @@ Show auth setup instructions:
 Authentication Setup
 ====================
 
-Check status:    npx convexent auth status
-Set API key:     npx convexent auth set-token sm_your_api_key_here
-Set API URL:     npx convexent auth set-url https://api.example.com
-Clear creds:     npx convexent auth logout
+Check status:    convexent auth status
+Set API key:     convexent auth set-token sm_your_api_key_here
+Set API URL:     convexent auth set-url https://api.example.com
+Clear creds:     convexent auth logout
 
 You can also use:
   --token <key>  flag on any command
@@ -129,12 +129,12 @@ Show calculation examples:
 Calculation
 ===========
 
-Basic:           npx convexent model calculate <id>
-With scenario:   npx convexent model calculate <id> --scenario upside
-As JSON:         npx convexent model calculate <id> --output json
+Basic:           convexent model calculate <id>
+With scenario:   convexent model calculate <id> --scenario upside
+As JSON:         convexent model calculate <id> --output json
 
 Extract specific metric:
-  npx convexent model calculate <id> --output json | jq '.metrics.revenue.values.base'
+  convexent model calculate <id> --output json | jq '.metrics.revenue.values.base'
 
 Note: metric values are nested by scenario: {base: [...], upside: [...], downside: [...]}
 ```
@@ -147,10 +147,10 @@ Show export examples:
 Excel Export
 ============
 
-Default name:    npx convexent model export <id>
-Custom path:     npx convexent model export <id> --out ./my-model.xlsx
+Default name:    convexent model export <id>
+Custom path:     convexent model export <id> --out ./my-model.xlsx
 ```
 
 ### For any other topic
 
-Run `npx convexent <topic> --help` to show the CLI's built-in help for that command.
+Run `convexent <topic> --help` to show the CLI's built-in help for that command.

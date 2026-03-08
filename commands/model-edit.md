@@ -25,13 +25,13 @@ If `$ARGUMENTS` is empty, ask the user for the model ID and what they want to ch
 Fetch the model to understand its current structure:
 
 ```bash
-npx convexent model get <model-id>
+convexent model get <model-id>
 ```
 
 ### 3. Propose the edit
 
 ```bash
-npx convexent model edit propose <model-id> --prompt "<instruction>"
+convexent model edit propose <model-id> --prompt "<instruction>"
 ```
 
 This is an async operation — the CLI polls until the job completes. The output includes:
@@ -51,10 +51,10 @@ Based on user response:
 
 ```bash
 # Apply
-npx convexent model edit apply <model-id> --prompt <prompt-id>
+convexent model edit apply <model-id> --prompt <prompt-id>
 
 # Discard
-npx convexent model edit discard <model-id> --prompt <prompt-id>
+convexent model edit discard <model-id> --prompt <prompt-id>
 ```
 
 ### 6. Verify
@@ -62,7 +62,7 @@ npx convexent model edit discard <model-id> --prompt <prompt-id>
 If applied, run a calculation to verify the changes:
 
 ```bash
-npx convexent model calculate <model-id>
+convexent model calculate <model-id>
 ```
 
 Show the user the updated metrics to confirm the edit looks correct.

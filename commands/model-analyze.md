@@ -23,7 +23,7 @@ If `$ARGUMENTS` is empty, ask the user for the model ID and their analysis quest
 ### 2. Run the analysis
 
 ```bash
-npx convexent model analyze run <model-id> --prompt "<question>"
+convexent model analyze run <model-id> --prompt "<question>"
 ```
 
 This is an async operation — the CLI polls until the job completes. The output includes the AI's analysis response.
@@ -33,7 +33,7 @@ This is an async operation — the CLI polls until the job completes. The output
 Show the user the analysis summary. If the analysis references specific metrics, optionally run a calculation to show current values:
 
 ```bash
-npx convexent model calculate <model-id>
+convexent model calculate <model-id>
 ```
 
 ### 4. Follow-up
@@ -45,5 +45,5 @@ Ask if the user wants to:
 
 For follow-up questions:
 ```bash
-npx convexent model analyze run <model-id> --prompt "<follow-up>" --thread <thread-id>
+convexent model analyze run <model-id> --prompt "<follow-up>" --thread <thread-id>
 ```
