@@ -22,7 +22,7 @@
       "license": "MIT",
       "keywords": ["financial-modeling", "cli", "convexent"],
       "category": "productivity",
-      "commands": "./.claude/skills"
+      "commands": "./commands"
     }
   ]
 }
