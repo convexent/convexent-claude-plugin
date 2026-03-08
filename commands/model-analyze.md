@@ -1,6 +1,6 @@
 ---
 description: Run AI scenario analysis on a Convexent model
-user_invocable: true
+argument-hint: <model-id> <analysis question>
 ---
 
 # Model Analyze

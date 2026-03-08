@@ -1,6 +1,6 @@
 ---
 description: Edit a Convexent model using AI — propose, review, apply, verify
-user_invocable: true
+argument-hint: <model-id> <edit instruction>
 ---
 
 # Model Edit

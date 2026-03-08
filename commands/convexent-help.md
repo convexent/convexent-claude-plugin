@@ -1,6 +1,6 @@
 ---
 description: Show Convexent CLI command reference and common workflows
-user_invocable: true
+argument-hint: Optional topic (edit, analyze, auth, calculate, export)
 ---
 
 # Convexent CLI Help
