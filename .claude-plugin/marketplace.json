@@ -1,0 +1,28 @@
+{
+  "name": "convexent",
+  "owner": {
+    "name": "Convexent",
+    "email": "support@convexent.com"
+  },
+  "metadata": {
+    "description": "Claude Code plugin for Convexent financial modeling CLI",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "convexent",
+      "source": ".",
+      "description": "Agent instructions and workflow skills for the Convexent CLI",
+      "version": "1.0.0",
+      "author": {
+        "name": "Convexent"
+      },
+      "homepage": "https://github.com/convexent/convexent-claude-plugin",
+      "repository": "https://github.com/convexent/convexent-claude-plugin",
+      "license": "MIT",
+      "keywords": ["financial-modeling", "cli", "convexent"],
+      "category": "productivity",
+      "commands": "./.claude/skills"
+    }
+  ]
+}
