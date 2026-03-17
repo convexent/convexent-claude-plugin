@@ -9,8 +9,18 @@ This repo contains agent instructions (`CLAUDE.md`) and slash command skills tha
 ## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code) installed
-- Node.js 18+ (for `convexent`)
+- `convexent` CLI installed (`npm install -g convexent`)
 - A Convexent API key or account
+
+### Cowork / Cloud environments
+
+Add this to your environment's **setup script** in the Cowork web UI:
+
+```bash
+npm install -g convexent
+```
+
+This runs before Claude Code launches and makes the CLI available in the session.
 
 ## Installation
 
@@ -18,18 +28,18 @@ Add this repo as a Claude Code project dependency. In your project's `.claude/se
 
 ```json
 {
-  "projects": [
-    {
-      "path": "/path/to/convexent-claude-plugin"
+  "enabledPlugins": {
+    "convexent@convexent": true
+  },
+  "extraKnownMarketplaces": {
+    "convexent": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/convexent/convexent-claude-plugin.git"
+      }
     }
-  ]
+  }
 }
-```
-
-Or clone and add to your Claude Code config:
-
-```bash
-git clone git@github.com:convexent/convexent-claude-plugin.git
 ```
 
 ## What's included
@@ -55,7 +65,13 @@ Agent instructions with:
 Before using the CLI, authenticate:
 
 ```bash
+# Browser-based login (interactive)
+convexent auth login
+
+# Or set an API key directly
 convexent auth set-token sm_your_api_key
 convexent auth set-url https://api.convexent.com  # if not default
 convexent auth status
 ```
+
+For Cowork environments, you can also set `CONVEXENT_API_KEY` as an environment variable in the Cowork environment config.
