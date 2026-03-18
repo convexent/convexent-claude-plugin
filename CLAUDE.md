@@ -64,11 +64,28 @@ convexent model edit discard <model-id> --prompt <prompt-id>
 convexent model analyze run <model-id> --prompt "What happens to IRR if terminal growth increases to 3%?"
 ```
 
+### Upload & Extract Documents
+```bash
+convexent upload <file> --project <project-id>           # upload + auto-extract
+convexent extractions --project <project-id>              # list extractions
+convexent extraction <extraction-id>                      # view extraction details
+```
+
 ### Create Model
 ```bash
+# From a text prompt
 convexent model create --prompt "SaaS revenue model with ARR, churn, and expansion" --name "SaaS Model"
-convexent model create --prompt "DCF valuation" --project <project-id>  # add to existing project
+convexent model create --prompt "DCF valuation" --project <project-id>
+
+# One-step: upload, extract, and create from source documents
+convexent model create --documents financials.xlsx --prompt "Build a 3-statement model" --name "My Model"
+
+# Two-step: upload first, then reference the upload ID
+convexent upload financials.xlsx --project <project-id>
+convexent model create --from-extractions <upload-id> --prompt "Build a 3-statement model" --project <project-id>
 ```
+
+Note: `--documents` and `--from-extractions` are mutually exclusive.
 
 ### History & Undo
 ```bash
