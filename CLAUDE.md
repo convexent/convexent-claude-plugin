@@ -45,7 +45,7 @@ If the install succeeds but a subsequent shell reports `command not found`, the 
 
 ## Auth
 
-Two-step preflight — `auth status` alone is not sufficient. It only checks whether a token exists on disk, not whether the server accepts it (tracked in [convexent-cli#4](https://github.com/convexent/convexent-cli/issues/4)):
+Two-step preflight — `auth status` alone is not sufficient. It only checks whether a token exists on disk, not whether the server accepts it:
 
 ```bash
 convexent auth status                        # token stored?
@@ -69,8 +69,6 @@ Each of these exposes the key on every invocation — process list, shell histor
 - `--token <token>` — per-call override; highest precedence.
 - `CONVEXENT_API_KEY` env var — inherited by every child process; commonly leaked via `.bashrc`.
 - `CONVEXENT_API_URL` env var / `--api-url` flag — URL override, not an auth method.
-
-See [convexent-cli#5](https://github.com/convexent/convexent-cli/issues/5) for the full leakage analysis. A headless-friendly device-code `auth login` flow is tracked in [convexent-cli#6](https://github.com/convexent/convexent-cli/issues/6); this section will simplify once that lands.
 
 ## Quick Reference
 
