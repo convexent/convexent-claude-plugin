@@ -20,6 +20,7 @@ Print the full command tree:
 ```
 convexent
 ├── auth
+│   ├── login              Browser-based interactive login (recommended)
 │   ├── status             Show current auth state
 │   ├── set-token <token>  Store an API key
 │   ├── set-url <url>      Store default API URL
