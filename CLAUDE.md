@@ -45,30 +45,57 @@ If the install succeeds but a subsequent shell reports `command not found`, the 
 
 ## Auth
 
-Two-step preflight — `auth status` alone is not sufficient. It only checks whether a token exists on disk, not whether the server accepts it:
+Single-command preflight — `auth status` verifies with the server:
 
 ```bash
-convexent auth status                        # token stored?
-convexent project list --limit 1             # server accepts it?
+convexent auth status
 ```
 
 | Result | Action |
 |---|---|
-| Both succeed | Authenticated. Continue. |
-| `auth status` exit 3 / `"authenticated": false` | Not authenticated. See below. |
-| `auth status` OK but verify call returns 401 / `"Invalid API key"` | Token is stale or revoked. Ask the user to refresh via `convexent auth set-token`. |
+| `"authenticated": true` | Continue. |
+| `"authenticated": false` (HTTP 401) | Stored token is stale or revoked. See **If not authenticated** below. |
+| `"authenticated": null` / network error | API unreachable. Tell the user; the plugin can't function until the API is reachable. |
 
-**If the user needs to authenticate, ask them to run `convexent auth set-token sm_...` outside this agent session** — a local terminal on their machine is fine. Do not accept the API key pasted into chat: `auth set-token <key>` places the key on argv, which is captured in shell history and in the agent transcript. Stored credentials persist in `~/.convexent/credentials.json` (0600), so once it's set locally, every subsequent `convexent` call here picks it up automatically — re-run the preflight above to confirm.
+### If not authenticated
 
-API keys start with `sm_`, from app.convexent.com → Settings → API keys. For non-prod hosts, pair with `convexent auth set-url <url>` (same storage, same ergonomics).
+Preferred path is a browser-based login — no API key handling at all. The CLI prints a URL and short verification code; the user opens the URL on any device they're already signed into, approves, and the token is saved automatically.
 
-### Other auth methods (escape hatches only)
+For agents with per-bash-call timeouts (e.g. Cowork's ~45s ceiling), drive the flow in two steps so each call returns immediately:
 
-Each of these exposes the key on every invocation — process list, shell history, agent transcripts — so they are appropriate only for CI / automation with a real secret manager, never for interactive use:
+```bash
+# 1. Start a session — prints session_id, code, auth_url, expires_at as JSON.
+convexent auth login-start
 
-- `--token <token>` — per-call override; highest precedence.
-- `CONVEXENT_API_KEY` env var — inherited by every child process; commonly leaked via `.bashrc`.
-- `CONVEXENT_API_URL` env var / `--api-url` flag — URL override, not an auth method.
+# 2. Surface the URL and code to the user; ask them to approve in their browser.
+
+# 3. Poll on your own cadence (every 5–10s). Each call exits immediately.
+convexent auth login-status --session <session-id>
+# Returns {status: "pending" | "approved" | "expired"}.
+# On "approved", the token is saved to ~/.convexent/credentials.json automatically.
+```
+
+For workstation use without timeout constraints, the wrapper does the polling for you:
+
+```bash
+convexent auth login   # opens a browser if available; otherwise prints URL + code; polls ~5 min
+```
+
+### Storing an API key directly
+
+If the user already has a long-lived API key (from app.convexent.com → Settings → API keys), set it via stdin so the key doesn't appear on argv:
+
+```bash
+echo -n "$TOKEN" | convexent auth set-token --stdin
+```
+
+For non-prod hosts, pair with `convexent auth set-url <url>`.
+
+**Don't ask the user to paste their API key into chat.** `--stdin` keeps the key off argv and shell history, but the agent transcript itself is still a leak surface. Either ask them to run `auth set-token --stdin` outside the agent session, or use `auth login` / `login-start` (which never exposes a raw key at all).
+
+### Legacy: `CONVEXENT_API_KEY` env var
+
+Still honored, but on its way out. The env var is inherited by every child process and easy to leak via `.bashrc` or CI logs. For new flows, prefer `auth login` (interactive) or `auth set-token --stdin` (programmatic).
 
 ## Quick Reference
 

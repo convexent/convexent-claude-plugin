@@ -20,9 +20,11 @@ Print the full command tree:
 ```
 convexent
 ├── auth
-│   ├── login              Browser-based interactive login (recommended)
-│   ├── status             Show current auth state
-│   ├── set-token <token>  Store an API key
+│   ├── login              Browser-based login (workstation use)
+│   ├── login-start        Start a CLI login session (for agents on short timeouts)
+│   ├── login-status       Check session status (--session <id>); saves token on approval
+│   ├── status             Verify the stored token is accepted by the server
+│   ├── set-token          Store an API key (reads from stdin: --stdin)
 │   ├── set-url <url>      Store default API URL
 │   └── logout             Clear stored credentials
 ├── project
@@ -51,7 +53,7 @@ convexent
 │   ├── list               List jobs (--status, --limit)
 │   ├── get <id>           Job details
 │   └── cancel <id>        Cancel running job
-└── Global flags: --output json|text|table, --api-url, --token, --verbose, --quiet
+└── Global flags: --output json|text|table, --api-url, --verbose, --quiet
 ```
 
 ### If topic is "edit"
@@ -109,17 +111,39 @@ Show auth setup instructions:
 Authentication Setup
 ====================
 
-Check status:    convexent auth status
-Set API key:     convexent auth set-token sm_your_api_key_here
-Set API URL:     convexent auth set-url https://api.example.com
-Clear creds:     convexent auth logout
+Recommended: browser-based login
+--------------------------------
+   convexent auth login
 
-You can also use:
-  --token <key>  flag on any command
-  CONVEXENT_API_KEY env var
-  CONVEXENT_API_URL env var
+   Prints a verification URL and short code. Opens a browser if one is
+   reachable, then polls for up to ~5 min for the user's approval. On
+   approval, saves the token to ~/.convexent/credentials.json.
 
-Priority: --token flag > env var > stored credentials
+   For agents with per-call bash timeouts (Cowork etc.), drive it in
+   two steps so each call returns immediately:
+
+     convexent auth login-start
+     # surface URL + code to the user, ask them to approve
+     convexent auth login-status --session <session-id>
+     # poll on your own cadence; each call exits immediately
+
+Verify:
+   convexent auth status
+   # Hits the server. Returns authenticated: true / false / null.
+
+Other commands
+--------------
+Store API key (CI / scripts):  echo -n "$TOKEN" | convexent auth set-token --stdin
+Set API URL:                   convexent auth set-url https://api.example.com
+Clear creds:                   convexent auth logout
+
+Legacy
+------
+   CONVEXENT_API_KEY env var      Still honored; slated for removal.
+   CONVEXENT_API_URL env var      URL override; not an auth method.
+
+   Inherited by every child process — easy to leak. Prefer
+   auth login or auth set-token --stdin for new flows.
 ```
 
 ### If topic is "calculate"
